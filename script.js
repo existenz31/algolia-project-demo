@@ -60,8 +60,6 @@ function searchCallback(content) {
 
 function renderHits($hits, results) {
     // Scan all hits and display them
-    console.log('Hits Found:', results.nbHits);
-
     const hitsFound = `${results.nbHits} result(s) found&nbsp;<span>in ${results.processingTimeMS / 1000} second(s)</span>`
     $hitsFound.html(hitsFound);
   
@@ -131,11 +129,9 @@ function renderFacets($foodTypesFacet, $paymentOptionsFacet, results) {
 
 function handleFacetClick(e) {
     e.preventDefault();
-    console.log('clicked');
     var target = e.target;
     var attribute = target.dataset.attribute;
     var value = target.dataset.value;
-    console.log('value: ', value)
     // Because we are listening in the parent, the user might click where there is no data
     if(!attribute || !value) return;
     // The toggleRefine method works for disjunctive facets as well
@@ -143,7 +139,6 @@ function handleFacetClick(e) {
 }
 
 function handleShowMoreClick(e) {
-    console.log('Show More');
     showMoreInProgress = true; // Append mode (quick and dirty)
     helper.nextPage().search();
 }
