@@ -16,6 +16,24 @@ var helper = algoliasearchHelper(algolia, RESTAURANTS_INDEX, {
   getRankingInfo: true
 });
 
+var userLocation = null;
+
+const successCallback = (position) => {
+  console.log(position);
+  loc = position.coords;
+  helper.setQueryParameter('aroundLatLng', `${loc.latitude}, ${loc.longitude}`);
+  helper.search();
+};
+
+const errorCallback = (error) => {
+  console.log(error);
+  helper.setQueryParameter('aroundLatLngViaIP', true);
+  helper.search();
+};
+
+navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+
 // Bind the result event to a function that will update the results
 helper.on("result", searchCallback);
 
@@ -39,10 +57,6 @@ $buttonShowMore.on('click', handleShowMoreClick);
 $inputfield.keyup(function(e) {
   helper.setQuery($inputfield.val()).search();
 });
-
-// Trigger a first search, so that we have a page with results
-// from the start.
-helper.search();
 
 // Result event callback
 function searchCallback(content) {

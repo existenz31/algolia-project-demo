@@ -136,7 +136,23 @@ var helper = algoliasearchHelper(algolia, RESTAURANTS_INDEX, {
   hitsPerPage: 5,
   maxValuesPerFacet: 7,
   getRankingInfo: true
-}); // Bind the result event to a function that will update the results
+});
+var userLocation = null;
+
+var successCallback = function successCallback(position) {
+  console.log(position);
+  loc = position.coords;
+  helper.setQueryParameter('aroundLatLng', "".concat(loc.latitude, ", ").concat(loc.longitude));
+  helper.search();
+};
+
+var errorCallback = function errorCallback(error) {
+  console.log(error);
+  helper.setQueryParameter('aroundLatLngViaIP', true);
+  helper.search();
+};
+
+navigator.geolocation.getCurrentPosition(successCallback, errorCallback); // Bind the result event to a function that will update the results
 
 helper.on("result", searchCallback); // The different parts of the UI that we want to use in this example
 
@@ -155,10 +171,7 @@ $buttonShowMore.on('click', handleShowMoreClick); // When there is a new charact
 
 $inputfield.keyup(function (e) {
   helper.setQuery($inputfield.val()).search();
-}); // Trigger a first search, so that we have a page with results
-// from the start.
-
-helper.search(); // Result event callback
+}); // Result event callback
 
 function searchCallback(content) {
   if (content.hits.length === 0) {
@@ -289,7 +302,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62882" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58063" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
